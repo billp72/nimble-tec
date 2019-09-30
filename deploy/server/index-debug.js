@@ -206,10 +206,9 @@ app.get('/thejob', function(req, res, next){
         obj.err = '';
         res.render(__dirname + '/../views/pages/applicant-job', obj);      
    }else{
-        res.render(__dirname + '/../views/pages/applicant-job', Object.assign(exporter.data, 
-            {'err':'something went wrong. contact the admin if it happens again.'}));
+        res.render(__dirname + '/../views/pages/applicant-job', 
+        {'err':'something went wrong. contact the admin if it happens again.'});
    }
-    exporter.empty(exporter.data);
 
     return next();
 });
@@ -218,9 +217,9 @@ app.get('/**', function(req, res, next){
     var context = req.app.locals.specialContext && 
         typeof(req.app.locals.specialContext) === "object" ? 
         req.app.locals.specialContext : exporter.empty(exporter.data); 
-    req.app.locals.specialContext = null;
+        req.app.locals.specialContext = null;
  
-    if(!req.session.userid){
+    if(!req.session.userid && req.url == '/'){
         context.password = password;
         res.render(__dirname + '/../views/pages/login', context);
     }
