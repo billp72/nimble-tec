@@ -21,6 +21,6 @@ package-lock.json
 /config
 
 # these can go into git keep out of heroku
-/public
-/server
-/views
+#/public
+#/server
+#/views
