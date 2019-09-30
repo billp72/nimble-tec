@@ -19,3 +19,8 @@ yarn-debug.log*
 yarn-error.log*
 package-lock.json
 /config
+
+# these can go into git keep out of heroku
+/public
+/server
+/views
