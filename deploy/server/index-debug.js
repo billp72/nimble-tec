@@ -9,12 +9,10 @@ const http                           = require('http');
 const express                        = require('express');
 const session                        = require('express-session');
 const cors                           = require('cors');
-//const urlFormat                      = require('url');
 //const { body,validationResult }    = require('express-validator/check');
 //const { sanitizeBody }             = require('express-validator/filter');
 const MongoClient                    = require('mongodb').MongoClient;
-//const MessagingResponse            = require('twilio').twiml.MessagingResponse;
-//const client                         = require('twilio')(accountSid, authToken);
+const client                         = require('twilio')(accountSid, authToken);
 const bcrypt                         = require('bcrypt');
 const generator                      = require('generate-password');
 const exporter                       = require('./config.js');
@@ -265,15 +263,6 @@ app.get('/job', function(req, res, next){
     return next();
 });
 
-/*app.use('*', function (error, req, res, next) {
-    if(res.headersSent){
-        return next(error)
-    }
-    res.status(500);
-    res.render(__dirname + '/views/pages/404');
-
-});*/
-
 //POST REQUESTS
 
 app.post('/submit-applicant', function(req, res, next){
@@ -377,7 +366,7 @@ app.post('/submit-jobform', function(req, res, next){
     return;
 });
 
-/*app.post('/submit-sms', (req, res) => {
+app.post('/submit-sms', (req, res) => {
     //must authorize
     var msg = req.body.message;
     var sms = req.body.sms;
@@ -391,13 +380,7 @@ app.post('/submit-jobform', function(req, res, next){
       .then(message =>  message.sid);
     });
     res.end(sms.length + ' messages sent');
-  });*/
-
-
-//const twiml = new MessagingResponse();
-//twiml.message('The Robots are coming! Head for the hills!');
-//res.writeHead(200, {'Content-Type': 'text/xml'});
-//res.end(twiml.toString());
+  });
 
 http.createServer(app).listen(1444, () => {
   console.log('Express server listening on port 1444');
