@@ -4,6 +4,7 @@
   "description": "for mass emailing",
   "main": "index.js",
   "scripts": {
+    "test": "node server/index.js",
     "start": "node deploy/server/index.js"
   },
   "author": "BillP",
