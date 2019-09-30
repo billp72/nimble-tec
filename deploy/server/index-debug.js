@@ -32,7 +32,7 @@ app.use(session({
     saveUninitialized: true
 }));
 app.use(cors());
-var base64 = exports = {
+var base64 = {
     encode: function (unencoded) {
        try{
             return {en: encodeURIComponent(JSON.stringify(unencoded))}
@@ -42,7 +42,7 @@ var base64 = exports = {
     },
     decode: function (encoded) {
         try{
-            return {en: decodeURIComponent(encoded).trim()}
+            return {en: decodeURIComponent(encoded)}
         }catch(e){
             return {er: e};
         } 
@@ -199,6 +199,16 @@ END POINTS
 */
 
 //GET
+app.get('/thejob', function(req, res, next){ 
+   if(typeof JSON.parse(Object.keys(req.query)[0]) === 'object'){
+        var obj = JSON.parse(Object.keys(req.query)[0]);
+        res.render(__dirname + '/../views/pages/applicant-job', obj);      
+   }else{
+        res.render(__dirname + '/../views/pages/applicant-job', Object.assign(exporter.data, 
+            {'err':'something went wrong. contact the admin if it happens again.'}));
+   }
+    return next();
+});
 
 app.get('/**', function(req, res, next){
     var context = req.app.locals.specialContext && 
@@ -249,19 +259,8 @@ app.get('/**', function(req, res, next){
      
     }
     
-    if(req.url == '/applicant-job'){
-        if(base64.decode(req.query.job).en || base64.decode(req.query.job).er){
-            if(base64.decode(req.query.job).er){ return; }
-            res.render(__dirname + '/../views/pages/applicant-job',
-                JSON.parse(base64.decode(req.query.job).en));
-        }
-
-    }
+    
     return next(); 
-});
-
-app.get('/job', function(req, res, next){
-    return next();
 });
 
 //POST REQUESTS
@@ -351,17 +350,22 @@ app.post('/submit-auth', function(req, res, next){
     });
    return;
 });
-
+//http://localhost:5001/thejob?'
 app.post('/submit-jobform', function(req, res, next){
     //must authorize
-    if(base64.decode(req.query.job).en){
-        if(base64.decode(req.query.job).er){ return }
-            let URL = 'http://localhost:1234/job?job=' + base64.encode(req.body).en;
+    if(base64.decode(req.body).en){
+        if(!base64.decode(req.body).er){ 
+            let URL = 'https://nimble-tec.herokuapp.com/thejob?' + base64.encode(req.body).en;
             req.app.locals.specialContext = Object.assign(exporter.data, {'url':URL});
-            res.redirect('/admin-jobform');
+            res.redirect(req.get('referer'));
+        }else{
+            req.app.locals.specialContext = Object.assign(exporter.data, {'msg':'something went wrong'});
+            res.redirect(req.get('referer'));
+        }
+            
     }else{
         req.app.locals.specialContext = Object.assign(exporter.data, {'msg':'something went wrong'});
-        res.redirect('/admin-jobform');
+        res.redirect(req.get('referer'));
     }
    
     return;
