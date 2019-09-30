@@ -3,8 +3,9 @@
 // DANGER! This is insecure. See http://twil.io/secure
 require('dotenv').config();
 
-const accountSid = process.env.ACCOUNTSID;
-const authToken  = process.env.AUTHTOKEN;
+const accountSid = process.env.ACCOUNTSIDLOCALTWILIO || process.env.ACCOUNTSIDTWILIO;
+const authToken  = process.env.AUTHTOKENLOCALTWILIO || process.env.AUTHTOKENTWILIO;
+const port       = process.env.PORT || process.env.PORTLOCAL;
 const http                           = require('http');
 const express                        = require('express');
 const session                        = require('express-session');
@@ -15,8 +16,8 @@ const MongoClient                    = require('mongodb').MongoClient;
 const client                         = require('twilio')(accountSid, authToken);
 const bcrypt                         = require('bcrypt');
 const generator                      = require('generate-password');
-const exporter                       = require('./config.js');
- 
+const exporter                       = require('./vars');
+//const config                         = require('../config/keys')
 /*
 EXPRESS STUFF
 */
@@ -26,7 +27,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.set('view engine', 'ejs');
 app.use(session({
-    secret: process.env.SESSIONSECRETE,
+    secret: process.env.SESSIONSECRETELOCAL || process.env.SESSIONSECRETE,
     resave: true,
     saveUninitialized: true
 }));
@@ -50,7 +51,7 @@ var base64 = exports = {
 /*
 DATABASE STUFF
 */
-const url = process.env.MONGOURL;
+const url = process.env.DEV_MONGODB || process.env.LOCALMONGODB;
 const dbName = 'applicants_db';
 const mongoClient = new MongoClient(
     url, 
@@ -381,9 +382,9 @@ app.post('/submit-sms', (req, res) => {
     });
     res.end(sms.length + ' messages sent');
   });
-
-http.createServer(app).listen(1444, () => {
-  console.log('Express server listening on port 1444');
+ 
+http.createServer(app).listen(port, () => {
+  console.log('Express server listening on port ' + port);
 });
 
 
