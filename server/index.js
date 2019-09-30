@@ -199,7 +199,8 @@ END POINTS
 */
 
 //GET
-app.get('/thejob', function(req, res, next){ 
+app.get('/thejob', function(req, res, next){
+
    if(typeof JSON.parse(Object.keys(req.query)[0]) === 'object'){
         let obj = JSON.parse(Object.keys(req.query)[0]);
         obj.err = '';
@@ -208,6 +209,8 @@ app.get('/thejob', function(req, res, next){
         res.render(__dirname + '/../views/pages/applicant-job', Object.assign(exporter.data, 
             {'err':'something went wrong. contact the admin if it happens again.'}));
    }
+    exporter.empty(exporter.data);
+
     return next();
 });
 
