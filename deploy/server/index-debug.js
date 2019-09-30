@@ -3,8 +3,8 @@
 // DANGER! This is insecure. See http://twil.io/secure
 require('dotenv').config();
 
-const accountSid = process.env.ACCOUNTSID;
-const authToken  = process.env.AUTHTOKEN;
+const accountSid = 'AC52dc249af5053cacd33d51fecba923a8';
+const authToken  = '3ef21fba4eb6e381016426d2a18645f1';
 const http                           = require('http');
 const express                        = require('express');
 const session                        = require('express-session');
@@ -50,7 +50,7 @@ var base64 = exports = {
 /*
 DATABASE STUFF
 */
-const url = process.env.MONGOURL;
+const url = 'mongodb+srv://BillP:nPQJODfQy5lLk3c0@cluster0-7y1ti.azure.mongodb.net/test?retryWrites=true&w=majority';
 const dbName = 'applicants_db';
 const mongoClient = new MongoClient(
     url, 
