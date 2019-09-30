@@ -1,0 +1,1 @@
+var data={firstname:"",tel:"",email:"",about:"",inputSkill:"",inputSkill1:"",inputSkill2:"",msg:"",hidden:"",password:"",err:"",url:""},empty=function(t){return Object.keys(t).forEach(function(e){if(t[e]&&"object"==typeof t[e])return empty(t[e]);t[e]=""}),t};module.exports={data:data,empty:empty};

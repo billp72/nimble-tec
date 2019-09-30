@@ -1,0 +1,1 @@
+$(function(t){requested=function(){var e=t(this).val();t.post("/admin-search-results",{skill:e},function(e){t("#myDropdown").append("<a>"+e.length+"</a>"),t("a").click(function(){t.each(e,(e,d)=>{t("tbody").append("<tr><td>"+d.name+"</td><td>"+d.age+"</td><td>"+d.phone+"</td><td>"+d.primary+"</td></tr>")})})})},t("#search-bar").keyup(t.debounce(250,requested))}(jQuery));
