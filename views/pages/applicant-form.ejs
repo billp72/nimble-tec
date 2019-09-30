@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>User Form</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="author" content="tech skills">
+  <meta name="description" content="The HTML5 tech skills">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+ <div class="holder">
+     <h1>NIMBLE TEC</h1><div class="small">fill out the form and receive emails and text messages for jobs that match your skills</div><br />
+    <form action="/submit-applicant" method="post">
+        <div class="form-group">
+                <label for="first-name">Name</label>
+                <input required 
+                       type="text" 
+                       value="" 
+                       name="firstName" 
+                       class="form-control" 
+                       id="first-name" 
+                       aria-describedby="firstName" 
+                       placeholder="Enter Name">
+        </div>
+        <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input required type="tel"
+                       pattern="[0-9]{3}[0-9]{3}[0-9]{4}" 
+                       name="tel" 
+                       class="form-control" 
+                       id="phone" 
+                       aria-describedby="Phonenumber" 
+                       placeholder="Enter Phone Number">
+                       <small>format: 1234567890</small>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="zip">Zip Code</label>
+                <input required type="zipcode"
+                       pattern="" 
+                       name="zip" 
+                       class="form-control" 
+                       id="zip" 
+                       aria-describedby="zipcode" 
+                       placeholder="Enter Zipcode">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="distance">Distance from</label>
+                <select required id="distance" name="distance" class="form-control">
+                  <option value="" selected>Choose...</option>
+                  <option value="1">1 mile</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+          <label for="about">Cover Letter (optional)</label>
+          <textarea maxlength="500"
+                    class="form-control" 
+                    id="about"
+                    name="cover"
+                    placeholder="Put description here"
+                    aria-label="description">
+          </textarea>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="inputSkill">Primary</label>
+                <select required id="inputSkill" name="inputSkill" class="form-control">
+                  <option value="" selected>Choose...</option>
+                  <option value="javascript">Javascript</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputSkill1">Secondary</label>
+                <select id="inputSkill1" name="inputSkill1" class="form-control">
+                  <option value="" selected>Choose...</option>
+                  <option value="PHP">PHP</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputSkill2">Hobbyist or a bit better</label>
+                <select id="inputSkill2" name="inputSkill2" class="form-control">
+                  <option value="" selected>Choose...</option>
+                  <option value="DB Admin">DB Admin</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+</div>
+<script>
+
+</script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    
+</body>
+</html>

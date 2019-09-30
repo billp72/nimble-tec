@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Welcome</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="author" content="tech skills">
+  <meta name="description" content="The HTML5 tech skills">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+ <div class="holder">
+    <h1>Log In</h1>
+    <form action="/submit-auth" method="post">
+      <div class="form-group">
+              <label for="username">Username</label>
+              <input required 
+                     type="email" 
+                     value="" 
+                     name="username" 
+                     class="form-control" 
+                     id="username" 
+                     aria-describedby="User name" 
+                     placeholder="Enter email">
+      </div>
+      <div class="form-group">
+              <label for="last-name">Password</label>
+              <input required
+                     type="password"
+                     name="password" 
+                     class="form-control" 
+                     id="password" 
+                     aria-describedby="password" 
+                     placeholder="Enter password">
+                     
+      </div>
+      <button class="btn btn-primary" type="submit">Log in</button>
+      <br />
+        <div class="font-error"><%=err %></div>
+  </form>
+  <div id="hiddenpassword" class="invisable"><%=password %></div>
+  <button id="addPassword" onclick="addPassword()" class="<%=hidden %>">New User Password</button><span class="txt"></span>
+</div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+ <script>
+    var addPassword = function (){ 
+        var pass = $("#hiddenpassword").html();
+        var passwordField = $("input[name=password]");
+            passwordField.val(pass);
+            passwordField.attr('type', 'text');
+            $("form").append("<input type='hidden' name='new' value='new'>");
+            $(".txt").html('<span class="small">Use our password or replace it with one of your own <a id="linkColor" onclick="justLogIn()">Remove</a></span>');
+            $("#addPassword").attr('disabled', 'disabled');
+     }
+ 
+     var justLogIn = function (){
+       var passwordField = $("input[name=password]");
+           $('input[name=new]').remove();
+           $("#addPassword").remove();
+           $(".txt").remove();
+           passwordField.val('');
+     }
+  </script>
+</body>
+</html>
+<script>
+  
+  
+  
+</script>
