@@ -202,7 +202,8 @@ END POINTS
 app.get('/thejob', function(req, res, next){ 
    if(typeof JSON.parse(Object.keys(req.query)[0]) === 'object'){
         let obj = JSON.parse(Object.keys(req.query)[0]);
-        res.render(__dirname + '/../views/pages/applicant-job', obj.err = '');      
+        obj.err = '';
+        res.render(__dirname + '/../views/pages/applicant-job', obj);      
    }else{
         res.render(__dirname + '/../views/pages/applicant-job', Object.assign(exporter.data, 
             {'err':'something went wrong. contact the admin if it happens again.'}));
