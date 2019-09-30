@@ -14,7 +14,7 @@ const cors                           = require('cors');
 //const { sanitizeBody }             = require('express-validator/filter');
 const MongoClient                    = require('mongodb').MongoClient;
 //const MessagingResponse            = require('twilio').twiml.MessagingResponse;
-const client                         = require('twilio')(accountSid, authToken);
+//const client                         = require('twilio')(accountSid, authToken);
 const bcrypt                         = require('bcrypt');
 const generator                      = require('generate-password');
 const exporter                       = require('./config.js');
@@ -377,7 +377,7 @@ app.post('/submit-jobform', function(req, res, next){
     return;
 });
 
-app.post('/submit-sms', (req, res) => {
+/*app.post('/submit-sms', (req, res) => {
     //must authorize
     var msg = req.body.message;
     var sms = req.body.sms;
@@ -391,7 +391,7 @@ app.post('/submit-sms', (req, res) => {
       .then(message =>  message.sid);
     });
     res.end(sms.length + ' messages sent');
-  });
+  });*/
 
 
 //const twiml = new MessagingResponse();
