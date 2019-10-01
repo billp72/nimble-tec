@@ -100,15 +100,13 @@ var db_queries = {
     }
 }
 function helpers(req, res, db){
+
     bcrypt.genSalt(10)
       .then(salt => {
-            return bcrypt.hash(req.body.password, salt);
-        })
-        .then(hash => {
-            var cred = {
-                'password':hash, 
-                'username': req.body.username
-            }
+        return bcrypt.hash(req.body.password, salt);
+      })
+      .then(hash => {
+          var cred = {'password':hash, 'username': req.body.username}
           db_queries.findOne(db, cred, function(user, err){
             if(!user){
                 db_queries.createUser(db, cred, function(response, error){
@@ -119,21 +117,21 @@ function helpers(req, res, db){
                        if(req.session.role){
                           req.app.locals.specialContext = Object.assign(exporter.data, req.body);
                           res.redirect('/admin-home'); 
-                        }else{
+                       }else{
                            req.app.locals.specialContext = Object.assign(exporter.data, req.body);
                            res.redirect('/applicant'); 
-                        }  
-                }else{
-                    res.status(500).end('Whoops. The account was not created ' + error);
-                }
-              });
-            }else{
+                       }  
+                     }else{
+                       res.status(500).end('Whoops. The account was not created ' + error);
+                     }
+                 });
+             }else{
                 req.app.locals.specialContext = Object.assign(exporter.data, 
                 {'err':'that username is already taken'});
                 res.redirect(req.get('referer'));
-            }  
-        })
-    }); 
+             }  
+           })
+       }); 
 }
 
 function createValidated(db, callback) {
