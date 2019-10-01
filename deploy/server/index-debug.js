@@ -353,7 +353,7 @@ app.post('/submit-auth', function(req, res, next){
     });
    return;
 });
-//http://localhost:5001/thejob?'
+
 app.post('/submit-jobform', function(req, res, next){
     //must authorize
     if(base64.decode(req.body).en){
