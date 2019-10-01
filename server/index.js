@@ -128,7 +128,8 @@ function helpers(req, res, db){
                 }
               });
             }else{
-                req.app.locals.specialContext = Object.assign(exporter.data, {'err':'that username is already taken'});
+                req.app.locals.specialContext = Object.assign(exporter.data, 
+                {'err':'that username is already taken'});
                 res.redirect(req.get('referer'));
             }  
         })
@@ -342,11 +343,11 @@ app.post('/submit-auth', function(req, res, next){
         }else{
             if(error){
                 req.app.locals.specialContext = Object.assign(exporter.data, 
-                    { 'err': 'something blew up ' + error });
+                { 'err': 'something blew up ' + error });
                 res.status(500).redirect(req.get('referer'));
             }else{
                 req.app.locals.specialContext = Object.assign(exporter.data, 
-                    {'err':'wrong password or username'});
+                {'err':'wrong password or username'});
                 res.status(200).redirect(req.get('referer'));
             } 
         }
