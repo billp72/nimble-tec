@@ -81,17 +81,15 @@ var db_queries = {
             callback(response.ops[0], error); 
         });       
     },
-    saveUserForm: function(db, user, id, callback){
-        /*
-             var objectToInsert = cred;
-    
+    saveUserForm: function(db, objectToInsert, callback){
+        
         var filter = {
-            'username':cred.username
+            'userid':objectToInsert.userid
         }
-        */
-        /*db.collection('applicant').replaceOne(filter, {$set: objectToInsert}, {returnNewDocument: true}, function(error, response){
+        db.collection('applicants').replaceOne(filter, {$set: objectToInsert}, 
+            {upsert: true, returnNewDocument: true}, function(error, response){
             callback(response, error);
-        })*/
+        });
     },
     findOne: function(db, cred, callback){
         db.collection('auth').findOne({'username':cred.username},function(err, username){
@@ -138,37 +136,49 @@ function createValidated(db, callback) {
     db.createCollection( 'applicants', {
         validator: { $jsonSchema: {
            bsonType: 'object',
-           required: [ 'phone', 'firstname', 'skill1', 'subscribed' ],
+           required: [ 'phone', 'firstname', 'zip', 'distance', 'skill1', 'subscribed', 'userid' ],
            properties: {
+              userid: {
+                 bsonType: 'string',
+                 description: 'must be a string and is required'
+              },
               phone: {
                  bsonType: 'string',
                  description: 'must be a string and is required'
               },
               email: {
-                 bsonType : 'string',
-                 pattern : '@mongodb\.com$',
+                 bsonType: 'string',
+                 pattern: '@mongodb\.com$',
                  description: 'must be a string and match the regular expression pattern'
               },
               firstname: {
-                 bsonType : 'string',
+                 bsonType: 'string',
                  description: 'must be a string and is required'
               },
-              lastname: {
-                 bsonType : 'string',
+              zip: {
+                 bsonType: 'string',
                  description: 'must be a string'
               },
+              distance: {
+                bsonType: 'string',
+                description: 'must be a string'
+             },
+             about: {
+                 bysonType: 'string',
+                 description: 'must be string text'
+             },
               $or: [
               {
                 skill1: {
-                    bsonType : 'string',
+                    bsonType: 'string',
                     description: 'must be a string and is required'
               }},{
                 skill2: {
-                    bsonType : 'string',
+                    bsonType: 'string',
                     description: 'must be a string'
               }},{
                 skill3: {
-                    bsonType : 'string',
+                    bsonType: 'string',
                     description: 'must be a string'
                 }}
               ],
@@ -228,15 +238,7 @@ app.get('/**', function(req, res, next){
         if(req.url == '/applicant'){
             res.render(__dirname + '/../views/pages/applicant-form', context); 
         }
-        
-        if(req.url == '/applicant-complete'){
-            if(context.formCompleted){
-                res.render(__dirname + '/../views/pages/applicant-complete', context);
-            }else{
-                res.redirect('/applicant');
-            }
-        }
-
+     
         if(req.url == '/'){
             context.hidden = 'invisible';
             res.render(__dirname + '/../views/pages/login', context);
@@ -268,10 +270,18 @@ app.get('/**', function(req, res, next){
 //POST REQUESTS
 
 app.post('/submit-applicant', function(req, res, next){
-    var context = Object.assign(exporter.data, {msg:'You\'re all set, ' + req.body.firstName});
-    req.app.locals.specialContext = context;
-    res.redirect('/applicant-complete');
-    return;
+    const db = mongoClient.db(dbName); 
+    req.body.userid = req.session.userid;
+    db_queries.saveUserForm(db, req.body, function(results, error){
+       if(!error){
+            res.status(200).send('You\'re information has been submitted, ' 
+            + results.ops[0].$set.firstName + '. <br />To unsubscribe form Nimble '
+            + 'Tec\'s list, text "unsubscribe" to 1(908) 356-5955');
+        }else{ 
+            res.status(500).send('Something went wrong, ' + error);
+       }  
+        
+    }); 
 });
 
 app.post('/admin-search-results', function(req, res, next){
@@ -320,7 +330,7 @@ app.post('/submit-auth', function(req, res, next){
                     if(req.session.role === 'admin' && 
                        req.session.userid){
                         req.app.locals.specialContext = Object.assign(exporter.data, 
-                            {'msg':'Admin Console'});
+                        {'msg':'Admin Console'});
                         res.redirect('/admin-home');
                     }else if(req.session.userid){
                         req.app.locals.specialContext = Object.assign(exporter.data, req.body);
@@ -329,11 +339,11 @@ app.post('/submit-auth', function(req, res, next){
                 }else{
                     if(err){
                         req.app.locals.specialContext = Object.assign(exporter.data, 
-                            {'err':'something went wrong '+ err});
+                        {'err':'something went wrong '+ err});
                         res.status(500).redirect(req.get('referer'));
                     }else{
                         req.app.locals.specialContext = Object.assign(exporter.data, 
-                            {'err':'wrong password or username'});
+                        {'err':'wrong password or username'});
                         res.status(500).redirect(req.get('referer'));
                     }
                 }
@@ -355,8 +365,8 @@ app.post('/submit-auth', function(req, res, next){
 
 app.post('/submit-jobform', function(req, res, next){
     //must authorize
-    if(base64.decode(req.body).en){
-        if(!base64.decode(req.body).er){ 
+    if(base64.encode(req.body).en){
+        if(!base64.encode(req.body).er){ 
             let URL = 'https://nimble-tec.herokuapp.com/thejob?' + base64.encode(req.body).en;
             req.app.locals.specialContext = Object.assign(exporter.data, {'url':URL});
             res.redirect(req.get('referer'));

@@ -7,12 +7,13 @@
   <meta name="author" content="tech skills">
   <meta name="description" content="The HTML5 tech skills">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
-<body>
+<body><!--action="/submit-applicant" method="post"-->
  <div class="holder">
      <h1>NIMBLE TEC</h1><div class="small">fill out the form and receive emails and text messages for jobs that match your skills</div><br />
-    <form action="/submit-applicant" method="post">
+    <form>
         <div class="form-group">
                 <label for="first-name">Name</label>
                 <input required 
@@ -33,13 +34,13 @@
                        id="phone" 
                        aria-describedby="Phonenumber" 
                        placeholder="Enter Phone Number">
-                       <small>format: 1234567890</small>
+                       <small>format: 234567890 (no country code example: +1)</small>
         </div>
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="zip">Zip Code</label>
                 <input required type="zipcode"
-                       pattern="" 
+                       pattern="[0-9]{5}" 
                        name="zip" 
                        class="form-control" 
                        id="zip" 
@@ -59,7 +60,7 @@
           <textarea maxlength="500"
                     class="form-control" 
                     id="about"
-                    name="cover"
+                    name="about"
                     placeholder="Put description here"
                     aria-label="description">
           </textarea>
@@ -87,14 +88,38 @@
                 </select>
             </div>
         </div>
-        <button class="btn btn-primary" type="submit">Submit</button>
+        <button id="submitform" class="btn btn-primary" type="submit">Submit</button>
     </form>
+    <div id="dialog" title="Submission Information"></div>
 </div>
 <script>
 
 </script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+      $(function() {
+             $("#dialog").dialog({
+               autoOpen: false
+            });
+         
+            $("#submitform").click(function() {
+                var url = "/submit-applicant";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: $("form").serialize(),
+                    success: function(data)
+                    {
+                      $("#dialog").html(data);
+                      $("#dialog").dialog("open");
+                    }
+                });
+                
+               return false;
+          });
+      });
+    </script>
 </body>
 </html>
