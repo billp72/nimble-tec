@@ -20,7 +20,7 @@ yarn-error.log*
 package-lock.json
 /config
 
-# these can go into git keep out of heroku
+# make changes in these folders, only
 #/public
 #/server
 #/views
