@@ -35,16 +35,16 @@ app.use(cors());
 var base64 = {
     encode: function (unencoded) {
        try{
-            return {en: encodeURIComponent(JSON.stringify(unencoded))}
+            return encodeURIComponent(JSON.stringify(unencoded))
         }catch(e){
-            return {er: e};
+            return {error: e};
         } 
     },
     decode: function (encoded) {
         try{
-            return {en: decodeURIComponent(encoded)}
+            return decodeURIComponent(encoded)
         }catch(e){
-            return {er: e};
+            return {error: e};
         } 
     }
 };
@@ -360,20 +360,13 @@ app.post('/submit-auth', function(req, res, next){
 
 app.post('/submit-jobform', function(req, res, next){
     //must authorize
-    if(base64.encode(req.body).en){
-        if(!base64.encode(req.body).er){ 
-            let URL = 'https://nimble-tec.herokuapp.com/thejob?' + base64.encode(req.body).en;
-            req.app.locals.specialContext = Object.assign(exporter.data, {'url':URL});
-            res.redirect(req.get('referer'));
-        }else{
-            req.app.locals.specialContext = Object.assign(exporter.data, 
-            {'msg':'something went wrong'});
-            res.redirect(req.get('referer'));
-        }
-            
+    if(typeof base64.encode(req.body) !== 'object'){
+        let URL = 'https://nimble-tec.herokuapp.com/thejob?' + base64.encode(req.body);
+        req.app.locals.specialContext = Object.assign(exporter.data, {'url':URL});
+        res.redirect(req.get('referer'));
     }else{
         req.app.locals.specialContext = Object.assign(exporter.data, 
-        {'msg':'something went wrong'});
+        {'msg':'something went wrong ' + base64.encode(req.body).error});
         res.redirect(req.get('referer'));
     }
    
