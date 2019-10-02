@@ -94,7 +94,7 @@ var db_queries = {
     findOne: function(db, cred, callback){
         db.collection('auth').findOne({'username':cred.username},function(err, username){
             callback(username, err);
-        })
+        });
     }
 }
 function helpers(req, res, db){
@@ -128,15 +128,15 @@ function helpers(req, res, db){
                 {'err':'that username is already taken'});
                 res.redirect(req.get('referer'));
              }  
-           })
-       }); 
+        });
+    }); 
 }
 
 function createValidated(db, callback) {
     db.createCollection( 'applicants', {
         validator: { $jsonSchema: {
            bsonType: 'object',
-           required: [ 'phone', 'firstname', 'zip', 'distance', 'skill1', 'subscribed', 'userid' ],
+           required: [ 'userid', 'phone', 'firstname', 'zip', 'distance', 'skill1', 'subscribed' ],
            properties: {
               userid: {
                  bsonType: 'string',
@@ -243,7 +243,6 @@ app.get('/**', function(req, res, next){
             context.hidden = 'invisible';
             res.render(__dirname + '/../views/pages/login', context);
         }
-    
     }
 
     if(req.session && req.session.role === 'admin'){
@@ -260,10 +259,7 @@ app.get('/**', function(req, res, next){
             context.msg = 'Admin Panel';
             res.render(__dirname + '/../views/pages/admin-home', context);
         }
-     
     }
-    
-    
     return next(); 
 });
 
@@ -275,12 +271,11 @@ app.post('/submit-applicant', function(req, res, next){
     db_queries.saveUserForm(db, req.body, function(results, error){
        if(!error){
             res.status(200).send('You\'re information has been submitted, ' 
-            + results.ops[0].$set.firstName + '. <br />To unsubscribe form Nimble '
+            + results.ops[0].$set.firstName + '. <br />To unsubscribe from Nimble '
             + 'Tec\'s list, text "unsubscribe" to 1(908) 356-5955');
         }else{ 
             res.status(500).send('Something went wrong, ' + error);
-       }  
-        
+       }      
     }); 
 });
 
@@ -329,34 +324,34 @@ app.post('/submit-auth', function(req, res, next){
                     req.session.role = result.role || '';    
                     if(req.session.role === 'admin' && 
                        req.session.userid){
-                        req.app.locals.specialContext = Object.assign(exporter.data, 
-                        {'msg':'Admin Console'});
-                        res.redirect('/admin-home');
+                       req.app.locals.specialContext = Object.assign(exporter.data, 
+                       {'msg':'Admin Console'});
+                       res.redirect('/admin-home');
                     }else if(req.session.userid){
-                        req.app.locals.specialContext = Object.assign(exporter.data, req.body);
-                        res.redirect('/applicant'); 
+                       req.app.locals.specialContext = Object.assign(exporter.data, req.body);
+                       res.redirect('/applicant'); 
                     } 
                 }else{
                     if(err){
-                        req.app.locals.specialContext = Object.assign(exporter.data, 
-                        {'err':'something went wrong '+ err});
-                        res.status(500).redirect(req.get('referer'));
+                      req.app.locals.specialContext = Object.assign(exporter.data, 
+                      {'err':'something went wrong '+ err});
+                      res.status(500).redirect(req.get('referer'));
                     }else{
-                        req.app.locals.specialContext = Object.assign(exporter.data, 
-                        {'err':'wrong password or username'});
-                        res.status(500).redirect(req.get('referer'));
-                    }
+                      req.app.locals.specialContext = Object.assign(exporter.data, 
+                      {'err':'wrong password or username'});
+                      res.status(500).redirect(req.get('referer'));
+                   }
                 }
             });
         }else{
             if(error){
-                req.app.locals.specialContext = Object.assign(exporter.data, 
-                { 'err': 'something blew up ' + error });
-                res.status(500).redirect(req.get('referer'));
+              req.app.locals.specialContext = Object.assign(exporter.data, 
+              { 'err': 'something blew up ' + error });
+              res.status(500).redirect(req.get('referer'));
             }else{
-                req.app.locals.specialContext = Object.assign(exporter.data, 
-                {'err':'wrong password or username'});
-                res.status(200).redirect(req.get('referer'));
+              req.app.locals.specialContext = Object.assign(exporter.data, 
+              {'err':'wrong password or username'});
+              res.status(200).redirect(req.get('referer'));
             } 
         }
     });
@@ -371,12 +366,14 @@ app.post('/submit-jobform', function(req, res, next){
             req.app.locals.specialContext = Object.assign(exporter.data, {'url':URL});
             res.redirect(req.get('referer'));
         }else{
-            req.app.locals.specialContext = Object.assign(exporter.data, {'msg':'something went wrong'});
+            req.app.locals.specialContext = Object.assign(exporter.data, 
+            {'msg':'something went wrong'});
             res.redirect(req.get('referer'));
         }
             
     }else{
-        req.app.locals.specialContext = Object.assign(exporter.data, {'msg':'something went wrong'});
+        req.app.locals.specialContext = Object.assign(exporter.data, 
+        {'msg':'something went wrong'});
         res.redirect(req.get('referer'));
     }
    
@@ -385,8 +382,8 @@ app.post('/submit-jobform', function(req, res, next){
 
 app.post('/submit-sms', (req, res) => {
     //must authorize
-    var msg = req.body.message;
-    var sms = req.body.sms;
+    var msg = req.body.message,
+        sms = req.body.sms;
     sms.forEach(function(sms){
       client.messages
       .create({
