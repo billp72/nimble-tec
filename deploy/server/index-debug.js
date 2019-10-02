@@ -91,8 +91,10 @@ var db_queries = {
             callback(response, error);
         });
     },
-    findOne: function(db, cred, callback){
-        db.collection('auth').findOne({'username':cred.username},function(err, username){
+    findOne: function(db, cred, collection, key, callback){
+        criteria = {};
+        criteria[key] = cred.user;
+        db.collection(collection).findOne(criteria,function(err, username){
             callback(username, err);
         });
     }
@@ -104,13 +106,13 @@ function helpers(req, res, db){
         return bcrypt.hash(req.body.password, salt);
       })
       .then(hash => {
-          var cred = {'password':hash, 'username': req.body.username}
-          db_queries.findOne(db, cred, function(user, err){
+          var cred = {'password':hash, 'user': req.body.username}
+          db_queries.findOne(db, cred, 'auth', 'username', function(user, err){
             if(!user){
                 db_queries.createUser(db, cred, function(response, error){
                     if(error) {return};
                     if(response){
-                       req.session.userid = response._id;
+                       req.session.userid = response._id.toString();
                        req.session.role = response.role || '';
                        if(req.session.role){
                           req.app.locals.specialContext = Object.assign(exporter.data, req.body);
@@ -223,8 +225,8 @@ app.get('/thejob', function(req, res, next){
 });
 
 app.get('/**', function(req, res, next){
-    var context = req.app.locals.specialContext && 
-        typeof(req.app.locals.specialContext) === "object" ? 
+    const db = mongoClient.db(dbName);
+    var context = req.app.locals.specialContext ? 
         req.app.locals.specialContext : exporter.empty(exporter.data); 
         req.app.locals.specialContext = null;
  
@@ -236,7 +238,24 @@ app.get('/**', function(req, res, next){
     if(req.session && req.session.userid){
 
         if(req.url == '/applicant'){
-            res.render(__dirname + '/../views/pages/applicant-form', context); 
+            
+            if(!context.firstName){
+                var contextRefresh
+                var cred = {'user': req.session.userid}
+                db_queries.findOne(db, cred, 'applicants', 'userid', function(user, err){
+                    if(user){
+                        contextRefresh = Object.assign(exporter.data, user);
+                        contextRefresh = exporter.trimObjStrings(contextRefresh);
+                    }else{
+                        contextRefresh = context;
+                    }            
+                    res.render(__dirname + '/../views/pages/applicant-form', contextRefresh);
+                });
+           }else{
+                res.render(__dirname + '/../views/pages/applicant-form', context);
+            }
+
+            return;
         }
      
         if(req.url == '/'){
@@ -260,6 +279,7 @@ app.get('/**', function(req, res, next){
             res.render(__dirname + '/../views/pages/admin-home', context);
         }
     }
+ 
     return next(); 
 });
 
@@ -316,11 +336,12 @@ app.post('/submit-auth', function(req, res, next){
       helpers(req, res, db);
       return;
     }
-    db_queries.findOne(db, {'username':req.body.username}, function(result, error){
+    var cred = {'user': req.body.username}
+    db_queries.findOne(db, cred,'auth', 'username', function(result, error){
         if(result){
             bcrypt.compare(req.body.password, result.password, function(err, response) {
                 if(response){
-                    req.session.userid = result._id;
+                    req.session.userid = result._id.toString();
                     req.session.role = result.role || '';    
                     if(req.session.role === 'admin' && 
                        req.session.userid){
@@ -328,8 +349,11 @@ app.post('/submit-auth', function(req, res, next){
                        {'msg':'Admin Console'});
                        res.redirect('/admin-home');
                     }else if(req.session.userid){
-                       req.app.locals.specialContext = Object.assign(exporter.data, req.body);
-                       res.redirect('/applicant'); 
+                        var cred = {'user': req.session.userid}
+                        db_queries.findOne(db, cred, 'applicants', 'userid', function(user, err){                
+                            req.app.locals.specialContext = Object.assign(exporter.data, user);
+                            res.redirect('/applicant'); 
+                        });
                     } 
                 }else{
                     if(err){

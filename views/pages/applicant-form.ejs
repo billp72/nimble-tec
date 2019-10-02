@@ -9,15 +9,17 @@
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="css/main.css">
+  
 </head>
 <body><!--action="/submit-applicant" method="post"-->
  <div class="holder">
      <h1>NIMBLE TEC</h1><div class="small">fill out the form and receive emails and text messages for jobs that match your skills</div><br />
     <form>
-        <div class="form-group">
+     <div class="form-group">
                 <label for="first-name">Name</label>
                 <input required 
-                       type="text" 
+                       type="text"
+                       value="<%=firstName %>" 
                        value="" 
                        name="firstName" 
                        class="form-control" 
@@ -28,6 +30,7 @@
         <div class="form-group">
                 <label for="phone">Phone Number</label>
                 <input required type="tel"
+                       value="<%=tel %>"
                        pattern="[0-9]{3}[0-9]{3}[0-9]{4}" 
                        name="tel" 
                        class="form-control" 
@@ -40,6 +43,7 @@
             <div class="form-group col-md-4">
                 <label for="zip">Zip Code</label>
                 <input required type="zipcode"
+                       value="<%=zip %>"
                        pattern="[0-9]{5}" 
                        name="zip" 
                        class="form-control" 
@@ -63,14 +67,15 @@
                     name="about"
                     placeholder="Put description here"
                     aria-label="description">
+<%=about %>
           </textarea>
         </div>
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="inputSkill">Primary</label>
                 <select required id="inputSkill" name="inputSkill" class="form-control">
-                  <option value="" selected>Choose...</option>
-                  <option value="javascript">Javascript</option>
+                    <option value="" selected>Choose...</option>
+                    <option value="javascript">Javascript</option>
                 </select>
             </div>
             <div class="form-group col-md-4">
@@ -92,32 +97,29 @@
     </form>
     <div id="dialog" title="Submission Information"></div>
 </div>
-<script>
-
-</script>
+    
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
       $(function() {
-             $("#dialog").dialog({
+        $("#dialog").dialog({
                autoOpen: false
-            });
-         
-            $("#submitform").click(function() {
-                var url = "/submit-applicant";
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: $("form").serialize(),
-                    success: function(data)
-                    {
-                      $("#dialog").html(data);
-                      $("#dialog").dialog("open");
-                    }
-                });
+          });
+         $("#submitform").click(function() {
+              var url = "/submit-applicant";
+              $.ajax({
+                  type: "POST",
+                  url: url,
+                  data: $("form").serialize(),
+                  success: function(data)
+                  {
+                    $("#dialog").html(data);
+                    $("#dialog").dialog("open");
+                  }
+              });
                 
-               return false;
+              return false;
           });
       });
     </script>

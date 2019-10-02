@@ -1,9 +1,11 @@
 //constants
 var data = {
-    firstname: '',
+    firstName: '',
     tel: '',
     email: '',
     about: '',
+    zip: '',
+    distance: '',
     inputSkill: '',
     inputSkill1: '',
     inputSkill2: '',
@@ -24,4 +26,15 @@ var empty = function(object) {
     return object;
 }
 
-module.exports = {'data': data, 'empty': empty};
+var trimObjStrings = function(context) {
+    var trimmedContext = {};
+    for(var prop in context){
+        if(typeof context[prop] === 'string'){
+            trimmedContext[prop] = context[prop].trim();
+        }
+    }
+
+    return typeof trimmedContext === 'object' ? trimmedContext : context;
+}
+
+module.exports = {'data': data, 'empty': empty, 'trimObjStrings': trimObjStrings};
