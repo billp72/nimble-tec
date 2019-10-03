@@ -13,7 +13,7 @@
 </head>
 <body><!--action="/submit-applicant" method="post"-->
  <div class="holder">
-     <h1>NIMBLE TEC</h1><div class="small">fill out the form and receive emails and text messages for jobs that match your skills</div><br />
+     <h1>NIMBLE TEC</h1><div class="small">fill out the form and receive emails and text messages for jobs that meet your distance criteria, skills and experience</div><br />
     <form>
      <div class="form-group">
                 <label for="first-name">Name</label>
@@ -58,6 +58,45 @@
                   <option value="1">1 mile</option>
                 </select>
             </div>
+            <div class="form-group col-md-4">
+                <label for="experience">Years of Experience</label>
+                <select required id="experience" name="experience" class="form-control">
+                  <option value="" selected>Choose...</option>
+                  <option value="1">1 year</option>
+                  <option value="2">2 years</option>
+                  <option value="3">3 years</option>
+                  <option value="4">4 years</option>
+                  <option value="5">5 years</option>
+                  <option value="6">6 years</option>
+                  <option value="7">7 years</option>
+                  <option value="8">8 years</option>
+                  <option value="9">9 years</option>
+                  <option value="10">10 years +</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="primary">Primary skill</label>
+                <select required id="primary" name="primary" class="form-control">
+                    <option value="" selected>Choose...</option>
+                    <option value="javascript">Javascript</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="secondary">Secondary skill</label>
+                <select id="secondary" name="secondary" class="form-control">
+                  <option value="" selected>Choose...</option>
+                  <option value="PHP">PHP</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="hobby">Hobbyist or a bit better</label>
+                <select id="hobby" name="hobby" class="form-control">
+                  <option value="" selected>Choose...</option>
+                  <option value="DB Admin">DB Admin</option>
+                </select>
+            </div>
         </div>
         <div class="form-group">
           <label for="about">Cover Letter (optional)</label>
@@ -70,29 +109,7 @@
 <%=about %>
           </textarea>
         </div>
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="inputSkill">Primary</label>
-                <select required id="inputSkill" name="inputSkill" class="form-control">
-                    <option value="" selected>Choose...</option>
-                    <option value="javascript">Javascript</option>
-                </select>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="inputSkill1">Secondary</label>
-                <select id="inputSkill1" name="inputSkill1" class="form-control">
-                  <option value="" selected>Choose...</option>
-                  <option value="PHP">PHP</option>
-                </select>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="inputSkill2">Hobbyist or a bit better</label>
-                <select id="inputSkill2" name="inputSkill2" class="form-control">
-                  <option value="" selected>Choose...</option>
-                  <option value="DB Admin">DB Admin</option>
-                </select>
-            </div>
-        </div>
+        
         <button id="submitform" class="btn btn-primary" type="submit">Submit</button>
     </form>
     <div id="dialog" title="Submission Information"></div>

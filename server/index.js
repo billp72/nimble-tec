@@ -73,7 +73,7 @@ var db_queries = {
     search: function(db, skill, callback){
         db.collection('applicants').find({'primary': skill}).toArray(function(error, response){
             callback(response, error);
-       });
+        });
     },
     createUser: function(db, cred, callback){
        
@@ -86,10 +86,14 @@ var db_queries = {
         var filter = {
             'userid':objectToInsert.userid
         }
-        db.collection('applicants').replaceOne(filter, {$set: objectToInsert}, 
-            {upsert: true, returnNewDocument: true}, function(error, response){
-            callback(response, error);
+        db.collection('applicants').createIndexes({'primary':objectToInsert.inputSkill, 
+        'distance':objectToInsert.distance}, function(){
+            db.collection('applicants').replaceOne(filter, {$set: objectToInsert}, 
+                {upsert: true, returnNewDocument: true}, function(error, response){
+                 callback(response, error);
+             });
         });
+        
     },
     findOne: function(db, cred, collection, key, callback){
         criteria = {};
@@ -138,7 +142,7 @@ function createValidated(db, callback) {
     db.createCollection( 'applicants', {
         validator: { $jsonSchema: {
            bsonType: 'object',
-           required: [ 'userid', 'phone', 'firstname', 'zip', 'distance', 'skill1', 'subscribed' ],
+           required: [ 'userid', 'phone', 'firstname', 'zip', 'distance', 'primary', 'subscribed' ],
            properties: {
               userid: {
                  bsonType: 'string',
@@ -165,21 +169,25 @@ function createValidated(db, callback) {
                 bsonType: 'string',
                 description: 'must be a string'
              },
+             experience: {
+                bsonType: 'string',
+                description: 'must be a string'
+             },
              about: {
                  bysonType: 'string',
                  description: 'must be string text'
              },
               $or: [
               {
-                skill1: {
+                primary: {
                     bsonType: 'string',
                     description: 'must be a string and is required'
               }},{
-                skill2: {
+                secondary: {
                     bsonType: 'string',
                     description: 'must be a string'
               }},{
-                skill3: {
+                hobby: {
                     bsonType: 'string',
                     description: 'must be a string'
                 }}
@@ -245,7 +253,6 @@ app.get('/**', function(req, res, next){
                 db_queries.findOne(db, cred, 'applicants', 'userid', function(user, err){
                     if(user){
                         contextRefresh = Object.assign(exporter.data, user);
-                        contextRefresh = exporter.trimObjStrings(contextRefresh);
                     }else{
                         contextRefresh = context;
                     }            
@@ -288,7 +295,9 @@ app.get('/**', function(req, res, next){
 app.post('/submit-applicant', function(req, res, next){
     const db = mongoClient.db(dbName); 
     req.body.userid = req.session.userid;
-    db_queries.saveUserForm(db, req.body, function(results, error){
+    var body = exporter.trimObjStrings(req.body);
+    console.log(body);
+    db_queries.saveUserForm(db, body, function(results, error){
        if(!error){
             res.status(200).send('You\'re information has been submitted, ' 
             + results.ops[0].$set.firstName + '. <br />To unsubscribe from Nimble '
@@ -301,29 +310,18 @@ app.post('/submit-applicant', function(req, res, next){
 
 app.post('/admin-search-results', function(req, res, next){
     if(req.session.role === 'admin'){
-            //db_queries['search'](db, req.query.skill, function(result, error){
-               // if(error && !result){
-                    let response = [
-                        {
-                            name: 'bill',
-                            age: 37,
-                            phone: '908-531-5329',
-                            primary: 'java'
-                        },
-                       {
-                            name: 'joe',
-                            age: 44,
-                            phone: '908-531-5320',
-                            primary: 'java'
-                        }
-                    ]
-         
-                    res.json(response);
-                //}else{
-                  //  res.send(error);
-               // }
-                
-            //});
+        const db = mongoClient.db(dbName); 
+        db_queries.search(db, req.body.primary, function(results, error){
+            if(results){
+                res.send(results);
+            }else{
+                if(error){
+                    res.status(500).send("something went wrong");
+                }
+                res.status(200).send('no results found');
+            }
+        })
+               
         }else{
             res.redirect('/');
         }
