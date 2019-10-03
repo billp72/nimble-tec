@@ -70,8 +70,8 @@ mongoClient.connect(err => {
 });
 
 var db_queries = {
-    search: function(db, skill, callback){
-        db.collection('applicants').find({'primary': skill}).toArray(function(error, response){
+    search: function(db, alpha, callback){
+        db.collection('applicants').find({'primary': new RegExp(alpha, 'i')}).toArray(function(error, response){
             callback(response, error);
         });
     },

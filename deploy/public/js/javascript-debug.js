@@ -1,9 +1,11 @@
 $(function($){
     requested = function(){
         
-        var Skill = $('#search-bar').val();
-        $.post('/admin-search-results', {'primary': Skill}, function(results){
-            $('#myDropdown').append('<a>'+results.length+' results</a>');
+        var Skill = $(this).val();
+        var alpha = Skill.length > 0 ? Skill : '0';
+        $.post('/admin-search-results', {'primary': alpha}, function(results){
+            $('.results').remove();
+            $('#myDropdown').append('<a class="results">'+results.length+' results</a>');
             $('a').click(function(){
                 $.each(results, (index, row) => {
                     $('tbody').append($('<tr>').append(
@@ -17,9 +19,12 @@ $(function($){
                     ));
                 });
             });
+            if(results.length === 0){
+                $('.results').remove();
+            }
         });
     }
-    //$.debounce( 250, requested ) 
-    $('#btn').click(requested);
+    //
+    $('#search-bar').keyup($.debounce( 250, requested ) );
 
 }(jQuery));
