@@ -7,6 +7,7 @@
   <meta name="author" content="tech skills">
   <meta name="description" content="The HTML5 tech skills">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <script src="https://kit.fontawesome.com/a62084b413.js" crossorigin="anonymous"></script>
 </head>
@@ -25,15 +26,15 @@
   <div class="form-group col-md-9">
       <input required 
              type="text"
-             name="textMessage" 
+             name="textmessage" 
              class="form-control" 
              id="textmessage" 
              aria-describedby="textmessage" 
-             placeholder="Enter Text Message">
+             placeholder="Enter Text Message with link">
     </div>
   </div>
   <div class="table-responsive-md">
-  <table class="table">
+  <table id="myTable" class="table">
     <thead>
       <th><input id="toggleCheckboxes" type="checkbox" /></th>
       <th>Name</th>
@@ -50,12 +51,14 @@
   <button id="submitform" class="btn btn-primary" type="submit">Send Message</button>
   </div>
 </div>
+<div id="dialog" title="Send text messages"></div>
   <script>
      
   </script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript" src="js/javascript.js"></script>
     
 </body>

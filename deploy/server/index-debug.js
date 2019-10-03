@@ -395,22 +395,25 @@ app.post('/submit-jobform', function(req, res, next){
     return;
 });
 
-app.post('/submit-sms', (req, res) => {
+app.post('/submit-sms', function(req, res){
     //must authorize
-    var msg = req.body.message,
-        sms = req.body.sms;
-    sms.forEach(function(sms){
-      client.messages
-      .create({
-          body: 'Nimble Tec: ' + sms.firstname + ', ' + msg,
-          from: '+19083565955',
-          to: '+1' + sms.tel
-      })
-      .then(message =>  message.sid);
+    var msg = req.body.textmessage,
+        batch = req.body.sms;
+        batch.forEach(function(sms){
+          client.messages
+             .create({
+                body: 'Nimble Tec: ' + msg,
+                from: '+19083565955',
+                to: '+1' + sms.tel
+        })
+        .then(message =>  message.sid);
     });
-    res.end(sms.length + ' messages sent');
+    var textres = batch.length > 1 ? 'Your message has been sent to '+ batch.length +
+    ' people' : 'Your message has been sent to '+ batch.length +' person';
+    res.status(200).send(textres);
   });
  
+
 http.createServer(app).listen(port, () => {
   console.log('Express server listening on port ' + port);
 });
