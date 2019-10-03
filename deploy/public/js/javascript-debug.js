@@ -56,8 +56,7 @@ $(function($){
             json.sms.push({'tel':arrayOfValues[i]});
        }
        json.textmessage = $('#textmessage').val();
-   
-       if(json.sms[0].tel && json.textmessage){
+       if(json.sms[0] && json.sms[0].tel && json.textmessage){
           $.ajax({
             type: 'POST',
             url: '/submit-sms',
