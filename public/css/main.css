@@ -40,6 +40,7 @@ h1, h2 {
 .font-error {
     color:red;
 }
+
 #search-bar {
     box-sizing: border-box;
     background-image: url('searchicon.png');
@@ -87,4 +88,5 @@ h1, h2 {
     margin-left: 0;
     border-width: .2rem;
  }
+
 }
