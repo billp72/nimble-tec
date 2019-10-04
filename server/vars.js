@@ -56,7 +56,6 @@ var buildGoogleMap = function(req, callback){
             callback(response);
           }
         });
-
 }
 
  

@@ -230,12 +230,12 @@ app.get('/thejob', function(req, res, next){
                 obj.map = results;
                 obj.map.requestUrl = obj.map.requestUrl + '&callback=initMap';
                 res.render(__dirname + '/../views/pages/applicant-job', obj);  
-            }else{
-                obj.map = '';
-                res.render(__dirname + '/../views/pages/applicant-job', obj);
+           }else{
+               obj.map = '';
+               res.render(__dirname + '/../views/pages/applicant-job', obj);
             }
            
-        })
+        });
              
    }else{
         res.render(__dirname + '/../views/pages/applicant-job', 
