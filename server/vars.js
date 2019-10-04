@@ -1,3 +1,8 @@
+const googlemaps = process.env.GOOGLEMAPSAPIKEYLOCAL || process.env.GOOGLEMAPSAPIKEYPROS;
+const googleMapsClient = require('@google/maps').createClient({
+    key: googlemaps
+});
+
 //constants
 var data = {
     firstName: '',
@@ -37,4 +42,22 @@ var trimObjStrings = function(context) {
     return typeof trimmedContext === 'object' ? trimmedContext : context;
 }
 
-module.exports = {'data': data, 'empty': empty, 'trimObjStrings': trimObjStrings};
+var buildGoogleMap = function(req, callback){
+    
+        googleMapsClient.directions({
+        origin: req.origin,
+        destination: req.destination,
+        mode: req.mode,
+      
+        }, function(err, response) {
+            //console.log(err);
+            //console.log(response);
+          if (!err) { 
+            callback(response);
+          }
+        });
+
+}
+
+ 
+module.exports = {'data': data, 'empty': empty, 'trimObjStrings': trimObjStrings, 'buildGoogleMap': buildGoogleMap};

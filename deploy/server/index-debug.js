@@ -103,7 +103,7 @@ var db_queries = {
         });
     }
 }
-function helpers(req, res, db){
+function createUser(req, res, db){
 
     bcrypt.genSalt(10)
       .then(salt => {
@@ -224,13 +224,25 @@ app.get('/thejob', function(req, res, next){
         let obj = JSON.parse(Object.keys(req.query)[0]);
         obj.err = '';
         obj.userid = req.session.userid ? req.session.userid : '';
-        res.render(__dirname + '/../views/pages/applicant-job', obj);      
+        exporter.buildGoogleMap({'origin':'07060', 'destination':'10002', 'mode':'driving'}, function(results){
+            if(typeof results === 'object'){
+                
+                obj.map = results;
+                obj.map.requestUrl = obj.map.requestUrl + '&callback=initMap';
+                res.render(__dirname + '/../views/pages/applicant-job', obj);  
+            }else{
+                obj.map = '';
+                res.render(__dirname + '/../views/pages/applicant-job', obj);
+            }
+           
+        })
+             
    }else{
         res.render(__dirname + '/../views/pages/applicant-job', 
         {'err':'something went wrong. contact the admin if it happens again.'});
    }
 
-    return next();
+    return;
 });
 
 app.get('/**', function(req, res, next){
@@ -332,7 +344,7 @@ app.post('/admin-search-results', function(req, res, next){
 app.post('/submit-auth', function(req, res, next){
     const db = mongoClient.db(dbName);  
     if(req.body.new){
-      helpers(req, res, db);
+      createUser(req, res, db);
       return;
     }
     var cred = {'user': req.body.username}
