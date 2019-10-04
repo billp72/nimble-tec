@@ -223,6 +223,7 @@ app.get('/thejob', function(req, res, next){
    if(typeof JSON.parse(Object.keys(req.query)[0]) === 'object'){
         let obj = JSON.parse(Object.keys(req.query)[0]);
         obj.err = '';
+        obj.userid = req.session.userid ? req.session.userid : '';
         res.render(__dirname + '/../views/pages/applicant-job', obj);      
    }else{
         res.render(__dirname + '/../views/pages/applicant-job', 
@@ -406,11 +407,14 @@ app.post('/submit-sms', function(req, res){
                 from: '+19083565955',
                 to: '+1' + sms.tel
         })
-        .then(message =>  message.sid);
+        .then((message) => { 
+            var textres = batch.length > 1 ? 'Your message has been sent to '+ batch.length +
+            ' people' : 'Your message has been sent to '+ batch.length +' person';
+            res.status(200).send(textres);
+            message.sid
+        });
     });
-    var textres = batch.length > 1 ? 'Your message has been sent to '+ batch.length +
-    ' people' : 'Your message has been sent to '+ batch.length +' person';
-    res.status(200).send(textres);
+    
   });
  
 

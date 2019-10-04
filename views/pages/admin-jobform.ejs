@@ -14,7 +14,8 @@
  <div class="holder">
    <h2>Nimble Tec Admin - Add Job Description</h2><br />
   <form action="/submit-jobform" method="post">
-    <div class="form-group">
+    <div class="form-row">
+    <div class="form-group col-md-6">
         <label for="title">Title</label>
         <input
                type="text" 
@@ -24,6 +25,17 @@
                id="title" 
                placeholder="Enter title">
     </div>
+    <div class="form-group col-md-6">
+      <label for="zipcode">Title</label>
+      <input
+             type="zipcode" 
+             value="" 
+             name="zipcode" 
+             class="form-control" 
+             id="zipcode" 
+             placeholder="Enter job zipcode">
+  </div>
+</div>
     <div class="form-group">
        <label for="description">Description</label>
        <textarea required 
