@@ -226,9 +226,9 @@ app.get('/thejob', function(req, res, next){
         obj.userid = req.session.userid ? req.session.userid : '';
         exporter.buildGoogleMap({'origin':'07060', 'destination':'10002', 'mode':'driving'}, function(results){
             if(typeof results === 'object'){
-                
+                var proxy = 'https://cors-anywhere.herokuapp.com/';
                 obj.map = results;
-                obj.map.requestUrl = obj.map.requestUrl + '&callback=initMap';
+                obj.map.requestUrl = proxy + obj.map.requestUrl + '&callback=initMap';
                 res.render(__dirname + '/../views/pages/applicant-job', obj);  
            }else{
                obj.map = '';
