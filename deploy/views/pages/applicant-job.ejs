@@ -30,8 +30,10 @@
                 lat: result.results[0].geometry.bounds.northeast.lat, 
                 lng: result.results[0].geometry.bounds.northeast.lng
               },
+              mapTypeId: 'satellite',
               zoom: 18
           });
+          map.setTilt(45);
           //directionsRenderer.setMap(map);
         });
       } //lat: 41.850033, lng: -87.6500523
