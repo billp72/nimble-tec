@@ -224,7 +224,7 @@ app.get('/thejob', function(req, res, next){
         let obj = JSON.parse(Object.keys(req.query)[0]);
         obj.err = '';
         obj.userid = req.session.userid ? req.session.userid : '';
-        obj.fulladdress = obj.address +' '+ obj.city + ', ' + obj.state;
+        obj.fulladdress = obj.address ? obj.address : '' +' '+ obj.city + ', ' + obj.state;
         obj.fulladdress = obj.fulladdress ? obj.fulladdress : '';
         obj.googlekey = exporter.googlekey;
         obj.mapurl = 'https://maps.googleapis.com/maps/api/js?key='+exporter.googlekey+'&callback=initMap';
