@@ -242,7 +242,6 @@ app.get('/thejob', function(req, res, next){
 
 app.get('/map-data', function(req, res){
     exporter.buildGoogleMap(req.query.address, function(results){
-        //console.log(req.query.address);
         res.status(200).send(results);
     })
 });
