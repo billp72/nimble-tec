@@ -224,25 +224,27 @@ app.get('/thejob', function(req, res, next){
         let obj = JSON.parse(Object.keys(req.query)[0]);
         obj.err = '';
         obj.userid = req.session.userid ? req.session.userid : '';
-        exporter.buildGoogleMap({'origin':'07060', 'destination':'10002', 'mode':'driving'}, function(results){
-            if(typeof results === 'object'){
-                var map = results.requestUrl.replace('directions/json', 'js');
-                obj.map = map + '&callback=initMap';
-                console.log(obj)
-                res.render(__dirname + '/../views/pages/applicant-job', obj);  
-           }else{
-               obj.map = '';
-               res.render(__dirname + '/../views/pages/applicant-job', obj);
-            }
-           
-        });
-             
+        obj.fulladdress = obj.address +' '+ obj.city + ', ' + obj.state;
+        obj.fulladdress = obj.fulladdress ? obj.fulladdress : '';
+        obj.googlekey = exporter.googlekey;
+        obj.mapurl = 'https://maps.googleapis.com/maps/api/js?key='+exporter.googlekey+'&callback=initMap';
+        res.render(__dirname + '/../views/pages/applicant-job', obj); 
+      
    }else{
+        obj.userid = '';
+        obj.fulladdress = '';
         res.render(__dirname + '/../views/pages/applicant-job', 
         {'err':'something went wrong. contact the admin if it happens again.'});
    }
 
     return;
+});
+
+app.get('/map-data', function(req, res){
+    exporter.buildGoogleMap(req.query.address, function(results){
+        //console.log(req.query.address);
+        res.status(200).send(results);
+    })
 });
 
 app.get('/**', function(req, res, next){
