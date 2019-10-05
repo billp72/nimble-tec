@@ -17,7 +17,6 @@ const client                         = require('twilio')(accountSid, authToken);
 const bcrypt                         = require('bcrypt');
 const generator                      = require('generate-password');
 const exporter                       = require('./vars');
-//const config                         = require('../config/keys')
 /*
 EXPRESS STUFF
 */
@@ -32,22 +31,7 @@ app.use(session({
     saveUninitialized: true
 }));
 app.use(cors());
-var base64 = {
-    encode: function (unencoded) {
-       try{
-            return encodeURIComponent(JSON.stringify(unencoded))
-        }catch(e){
-            return {error: e};
-        } 
-    },
-    decode: function (encoded) {
-        try{
-            return decodeURIComponent(encoded)
-        }catch(e){
-            return {error: e};
-        } 
-    }
-};
+
 /*
 DATABASE STUFF
 */
@@ -224,7 +208,7 @@ app.get('/thejob', function(req, res, next){
         let obj = JSON.parse(Object.keys(req.query)[0]);
         obj.err = '';
         obj.userid = req.session.userid ? req.session.userid : '';
-        obj.fulladdress = obj.address ? obj.address : '' +' '+ obj.city + ', ' + obj.state;
+        obj.fulladdress = obj.address +' '+ obj.city + ', ' + obj.state;
         obj.fulladdress = obj.fulladdress ? obj.fulladdress : '';
         obj.googlekey = exporter.googlekey;
         obj.mapurl = 'https://maps.googleapis.com/maps/api/js?key='+exporter.googlekey+'&callback=initMap';
@@ -310,7 +294,6 @@ app.post('/submit-applicant', function(req, res, next){
     const db = mongoClient.db(dbName); 
     req.body.userid = req.session.userid;
     var body = exporter.trimObjStrings(req.body);
-    console.log(body);
     db_queries.saveUserForm(db, body, function(results, error){
        if(!error){
             res.status(200).send('You\'re information has been submitted, ' 
@@ -396,14 +379,21 @@ app.post('/submit-auth', function(req, res, next){
 
 app.post('/submit-jobform', function(req, res, next){
     //must authorize
-    if(typeof base64.encode(req.body) !== 'object'){
-        let URL = 'https://nimble-tec.herokuapp.com/thejob?' + base64.encode(req.body);
+    if(typeof exporter.base64.encode(req.body) !== 'object'){
+        let URL = 'https://nimble-tec.herokuapp.com/thejob?' + exporter.base64.encode(req.body);
         req.app.locals.specialContext = Object.assign(exporter.data, {'url':URL});
         res.redirect(req.get('referer'));
     }else{
-        req.app.locals.specialContext = Object.assign(exporter.data, 
-        {'msg':'something went wrong ' + base64.encode(req.body).error});
-        res.redirect(req.get('referer'));
+        if(exporter.base64.encode(req.body).error){
+            req.app.locals.specialContext = Object.assign(exporter.data, 
+            {'msg':'something went wrong ' + exporter.base64.encode(req.body).error});
+            res.redirect(req.get('referer'));
+        }else{
+            req.app.locals.specialContext = Object.assign(exporter.data, 
+            {'msg':'something went wrong'});
+            res.redirect(req.get('referer'));
+        }
+        
     }
    
     return;
@@ -434,5 +424,3 @@ app.post('/submit-sms', function(req, res){
 http.createServer(app).listen(port, () => {
   console.log('Express server listening on port ' + port);
 });
-
-

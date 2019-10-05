@@ -38,10 +38,26 @@ var trimObjStrings = function(context) {
     return typeof trimmedContext === 'object' ? trimmedContext : context;
 }
 
-
+var base64 = {
+    encode: function (unencoded) {
+       try{
+            return encodeURIComponent(JSON.stringify(unencoded))
+        }catch(e){
+            return {error: e};
+        } 
+    },
+    decode: function (encoded) {
+        try{
+            return decodeURIComponent(encoded)
+        }catch(e){
+            return {error: e};
+        } 
+    }
+};
  
 module.exports = {'data': data, 
                   'empty': empty, 
                   'trimObjStrings': trimObjStrings, 
-                  'googlekey': googlemapskey
+                  'googlekey': googlemapskey,
+                  'base64': base64
                 };
