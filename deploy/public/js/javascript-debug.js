@@ -1,14 +1,16 @@
 $(function($){
-    requested = function(){
-        
+    requested = function(currentPage){
+        var page = typeof currentPage === 'object' ? 1 : currentPage;
+        var _this = this;
         var Skill = $(this).val();
         var alpha = Skill.length > 0 ? Skill : '0';
-        $.post('/admin-search-results', {'primary': alpha}, function(results){
+        console.log(alpha, page);
+        $.post('/admin-search-results', {'primary': alpha, 'page':page}, function(results){
             $('.results').remove();
-            $('#myDropdown').append('<a class="results">'+results.length+' results</a>');
+            $('#myDropdown').append('<a class="results">'+results.count+' results</a>');
             $('a').click(function(){
                 $('tbody').empty();
-                $.each(results, (index, row) => {
+                $.each(results.results, (index, row) => {
                     $('tbody').append($('<tr>').append(
                         $('<td>').append('<input name="box-'+index+'" class="all" type="checkbox"'+
                         'value="'+row.tel+'" />'),
@@ -23,10 +25,10 @@ $(function($){
                 });
             });
      
-            if(results.length === 0){
+            if(results.count === 0){
                 $('.results').remove();
             }
-    
+            createPagination(results.pages, results.currentPage, _this);
         });
     }
  
@@ -75,4 +77,40 @@ $(function($){
   
        return false;
    });
+
+   var createPagination = function(pages, currentPage, _this){
+        currentPage = parseInt(currentPage, 10);
+        if(currentPage < pages && pages != 0){
+             
+            $(".pagination").html(
+                '<span>'+currentPage+'</span><a id="currentPage"></a>&nbsp;of&nbsp;'+
+                '<span>'+pages+'</span><a id="totalPages"> > </a>'
+            );
+        }
+        if(currentPage > pages && pages != 0){
+            
+            $(".pagination").html(
+                '<span>'+currentPage+'</span>&nbsp;&nbsp;<a id="currentPage"> < </a>&nbsp;of&nbsp;'+
+                '<span>'+pages+'</span><a id="totalPages"></a>'
+            );
+        }
+        if(currentPage === pages){
+            $(".pagination").html(
+                '<span>'+currentPage+'</span>&nbsp;of&nbsp;'+
+                '<span>'+pages+'</span>&nbsp;pages'
+                );
+          
+        }
+        
+      $(".pagination").on('click',function(e){
+          if(currentPage !== pages){
+              if(e.target.id === 'currentPage'){
+                currentPage++;
+              }else if(e.target.id === 'totalPages'){
+                currentPage--;
+              }
+            requested.call(_this, currentPage);
+          }
+      });
+   }
 }(jQuery));

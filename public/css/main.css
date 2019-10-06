@@ -81,6 +81,10 @@ h1, h2 {
   
   .show {display: block;}
 
+  .pagination {
+      float: right;
+  }
+
 @media (min-width: 576px){
  .holder {
     padding: 2rem;

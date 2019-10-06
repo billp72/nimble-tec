@@ -17,6 +17,10 @@ const client                         = require('twilio')(accountSid, authToken);
 const bcrypt                         = require('bcrypt');
 const generator                      = require('generate-password');
 const exporter                       = require('./vars');
+var password = generator.generate({
+    length: 10,
+    numbers: true
+});
 /*
 EXPRESS STUFF
 */
@@ -54,19 +58,23 @@ mongoClient.connect(err => {
 });
 
 var db_queries = {
-    search: function(db, alpha, callback){
-        db.collection('applicants').find({'primary': new RegExp(alpha, 'i')}).toArray(function(error, response){
-            callback(response, error);
+    search: function(db, alpha, page, resPerPage, callback){
+        db.collection('applicants').find({'primary': new RegExp(alpha, 'i')})
+        .skip((resPerPage * page) - resPerPage)
+        .limit(resPerPage)
+        .toArray(function(error, response){
+            db.collection('applicants').find({'primary': new RegExp(alpha, 'i')}).count(function(err, count){
+                callback(response, count, error);
+            });
+            
         });
     },
-    createUser: function(db, cred, callback){
-       
+    createUser: function(db, cred, callback){  
         db.collection('auth').insertOne(cred, function(error, response){
             callback(response.ops[0], error); 
         });       
     },
-    saveUserForm: function(db, objectToInsert, callback){
-        
+    saveUserForm: function(db, objectToInsert, callback){  
         var filter = {
             'userid':objectToInsert.userid
         }
@@ -76,8 +84,7 @@ var db_queries = {
                 {upsert: true, returnNewDocument: true}, function(error, response){
                  callback(response, error);
              });
-        });
-        
+        });    
     },
     findOne: function(db, cred, collection, key, callback){
         criteria = {};
@@ -88,7 +95,6 @@ var db_queries = {
     }
 }
 function createUser(req, res, db){
-
     bcrypt.genSalt(10)
       .then(salt => {
         return bcrypt.hash(req.body.password, salt);
@@ -193,10 +199,6 @@ function createValidated(db, callback) {
              callback();
        });
   };
-  var password = generator.generate({
-    length: 10,
-    numbers: true
-  });
 /*
 END POINTS
 */
@@ -307,10 +309,17 @@ app.post('/submit-applicant', function(req, res, next){
 
 app.post('/admin-search-results', function(req, res, next){
     if(req.session.role === 'admin'){
-        const db = mongoClient.db(dbName); 
-        db_queries.search(db, req.body.primary, function(results, error){
+        const db = mongoClient.db(dbName);
+        const resPerPage = 9; // results per page
+        var page = req.body.page || 1;// Page 
+        console.log(page); 
+        db_queries.search(db, req.body.primary, page, resPerPage, function(results, count, error){
             if(results){
-                res.send(results);
+                res.send(
+                    {'results':results,
+                    'count':count, 
+                    'pages': Math.ceil(count / resPerPage), 
+                    'currentPage':page});
             }else{
                 if(error){
                     res.status(500).send("something went wrong");
@@ -323,7 +332,6 @@ app.post('/admin-search-results', function(req, res, next){
             res.redirect('/');
         }
 });
-
 
 app.post('/submit-auth', function(req, res, next){
     const db = mongoClient.db(dbName);  
