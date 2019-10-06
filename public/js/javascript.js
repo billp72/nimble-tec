@@ -80,21 +80,28 @@ $(function($){
 
    var createPagination = function(pages, currentPage, _this){
         currentPage = parseInt(currentPage, 10);
-        if(currentPage < pages && pages != 0){
-             
+        if(currentPage < pages && currentPage === 1){  
             $(".pagination").html(
                 '<span>'+currentPage+'</span><a id="currentPage"></a>&nbsp;of&nbsp;'+
                 '<span>'+pages+'</span><a id="totalPages"> > </a>'
             );
         }
-        if(currentPage > pages && pages != 0){
-            
+
+        if(currentPage === pages && pages > 1){
             $(".pagination").html(
-                '<span>'+currentPage+'</span>&nbsp;&nbsp;<a id="currentPage"> < </a>&nbsp;of&nbsp;'+
-                '<span>'+pages+'</span><a id="totalPages"></a>'
+                '<a id="currentPage"> < </a>&nbsp;of&nbsp;<span>'+currentPage+'</span>&nbsp;&nbsp;'+
+                '<span>'+pages+'</span>&nbsp;pages'
+                );
+        }
+        
+        if(currentPage < pages && currentPage > 1){     
+            $(".pagination").html(
+                '<a id="currentPage"> < </a>&nbsp;of&nbsp;<span>'+currentPage+'</span>&nbsp;&nbsp;' +
+                '<span>'+pages+'</span><a id="totalPages"> > </a>'
             );
         }
-        if(currentPage === pages){
+        
+        if(currentPage === pages && pages === 1){
             $(".pagination").html(
                 '<span>'+currentPage+'</span>&nbsp;of&nbsp;'+
                 '<span>'+pages+'</span>&nbsp;pages'
