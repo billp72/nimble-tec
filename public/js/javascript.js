@@ -15,7 +15,8 @@ $(function($){
                         $('<td>').append('<input name="box-'+index+'" class="all" type="checkbox"'+
                         'value="'+row.tel+'" />'),
                         $('<td class="column-'+index+'">').append(row.firstName),
-                        $('<td class="column-'+index+'">').append(row.about),
+                        $('<td class="column-'+index+'">').append(row.about.trunc(50, true) +
+                        '&nbsp;(<span onclick="seefull(\''+ row.about + '\')" class="linkColor">see full</span>)'),
                         $('<td class="column-'+index+'">').append(row.distance + ' mi'),
                         $('<td class="column-'+index+'">').append(row.tel),
                         $('<td class="column-'+index+'">').append(row.primary),
@@ -93,7 +94,7 @@ $(function($){
                 '<span>'+pages+'</span>&nbsp;pages'
                 );
         }
-        
+
         if(currentPage < pages && currentPage > 1){     
             $(".pagination").html(
                 '<a id="currentPage"> < </a>&nbsp;of&nbsp;<span>'+currentPage+'</span>&nbsp;&nbsp;' +
@@ -120,4 +121,13 @@ $(function($){
           }
       });
    }
+  
+   String.prototype.trunc =
+     function( n, useWordBoundary ){
+         if (this.length <= n) { return this; }
+         var subString = this.substr(0, n-1);
+         return (useWordBoundary 
+            ? subString.substr(0, subString.lastIndexOf(' ')) 
+            : subString) + "&hellip;";
+      };
 }(jQuery));

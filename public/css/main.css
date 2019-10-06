@@ -21,6 +21,9 @@ h1, h2 {
 #linkColor {
     color:#0000EE !important;
 }
+.linkColor {
+    color:#0000EE !important;
+}
 .title {
     font-size: 30px;
     color:black;
@@ -85,12 +88,14 @@ h1, h2 {
       float: right;
   }
 
-@media (min-width: 576px){
+@media (max-width: 775px) {
  .holder {
     padding: 2rem;
     margin-right: 0;
     margin-left: 0;
     border-width: .2rem;
  }
-
+ #textmessage {
+     margin-top:10px;
+ }
 }
