@@ -4,7 +4,7 @@ $(function($){
         var _this = this;
         var Skill = $(this).val();
         var alpha = Skill.length > 0 ? Skill : '0';
-        console.log(alpha, page);
+    
         $.post('/admin-search-results', {'primary': alpha, 'page':page}, function(results){
             $('.results').remove();
             $('#myDropdown').append('<a class="results">'+results.count+' results</a>');
