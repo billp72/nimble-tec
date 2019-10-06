@@ -60,7 +60,7 @@ mongoClient.connect(err => {
 var db_queries = {
     search: function(db, alpha, page, resPerPage, callback){
         db.collection('applicants').find({'primary': new RegExp(alpha, 'i')})
-        .skip((resPerPage * page) - resPerPage)
+        .skip((resPerPage * page) - resPerPage) //get first 9 then skip 9 and get the next 9 and so on
         .limit(resPerPage)
         .toArray(function(error, response){
             db.collection('applicants').find({'primary': new RegExp(alpha, 'i')}).count(function(err, count){
@@ -312,7 +312,6 @@ app.post('/admin-search-results', function(req, res, next){
         const db = mongoClient.db(dbName);
         const resPerPage = 9; // results per page
         var page = req.body.page || 1;// Page 
-        console.log(page); 
         db_queries.search(db, req.body.primary, page, resPerPage, function(results, count, error){
             if(results){
                 res.send(
