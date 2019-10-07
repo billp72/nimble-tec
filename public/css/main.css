@@ -1,3 +1,9 @@
+a {
+    color:#0000EE !important;
+}
+a:hover {
+    text-decoration: none;
+}
 
 .holder {
     position: relative;
@@ -18,12 +24,13 @@ h1, h2 {
 .txt {
     padding-left: 5px;
 }
-#linkColor {
+/*#linkColor {
     color:#0000EE !important;
-}
+}*/
 .linkColor {
     color:#0000EE !important;
 }
+
 .title {
     font-size: 30px;
     color:black;
@@ -86,6 +93,9 @@ h1, h2 {
 
   .pagination {
       float: right;
+  }
+  .totalPages, .currentPage {
+      font-weight: 800;
   }
 
 @media (max-width: 775px) {

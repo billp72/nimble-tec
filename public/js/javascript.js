@@ -80,25 +80,27 @@ $(function($){
    });
 
    var createPagination = function(pages, currentPage, _this){
+       pages = 2;
         currentPage = parseInt(currentPage, 10);
+        currentPage = 2;
         if(currentPage < pages && currentPage === 1){  
             $(".pagination").html(
-                '<span>'+currentPage+'</span><a id="currentPage"></a>&nbsp;of&nbsp;'+
-                '<span>'+pages+'</span><a id="totalPages"> > </a>'
+                '<span>'+currentPage+'</span><a class="currentPage"></a>&nbsp;of&nbsp;'+
+                '<span>'+pages+'</span>&nbsp;&nbsp;<a href="" class="totalPages"> > </a>'
             );
         }
 
         if(currentPage === pages && pages > 1){
             $(".pagination").html(
-                '<a id="currentPage"> < </a>&nbsp;of&nbsp;<span>'+currentPage+'</span>&nbsp;&nbsp;'+
-                '<span>'+pages+'</span>&nbsp;pages'
+                '<a href="" class="currentPage"> < </a>&nbsp;&nbsp;<span>'+currentPage+'</span>&nbsp;&nbsp;of'+
+                '&nbsp;&nbsp;<span>'+pages+'</span>&nbsp;&nbsp;pages'
                 );
         }
 
         if(currentPage < pages && currentPage > 1){     
             $(".pagination").html(
-                '<a id="currentPage"> < </a>&nbsp;of&nbsp;<span>'+currentPage+'</span>&nbsp;&nbsp;' +
-                '<span>'+pages+'</span><a id="totalPages"> > </a>'
+                '<a href="" class="currentPage"> < </a>&nbsp;&nbsp;<span>'+currentPage+'</span>&nbsp;&nbsp;of' +
+                '&nbsp;&nbsp;<span>'+pages+'</span>&nbsp;&nbsp;<a href="" class="totalPages"> > </a>'
             );
         }
         
