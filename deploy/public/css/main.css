@@ -1,6 +1,6 @@
 a{color:#00e !important}a:hover{text-decoration:none}.holder{position:relative;padding:2rem;margin:2rem -15px 0;border:solid #f7f7f9;border-width:.2rem 0 0}
 h1,h2{color:lightBlue}.body{margin-top:50px}.invisable{visibility:hidden}.txt{padding-left:5px}
-.linkColor{color:#00e !important}.title{font-size:30px;color:black;border-bottom:#98afc7 solid 2px;padding-bottom:15px}
+.linkColor{color:#00e !important;cursor:pointer}.title{font-size:30px;color:black;border-bottom:#98afc7 solid 2px;padding-bottom:15px}
 .brand{margin:10px 0 0 30px}.btnclass{margin-top:50px}.active-cyan-2 input[type=text]:focus:not([readonly]){border-bottom:1px solid #4dd0e1;box-shadow:0 1px 0 0 #4dd0e1}
 .font-error{color:red}#search-bar{box-sizing:border-box;background-image:url('searchicon.png');background-position:14px 12px;background-repeat:no-repeat;font-size:16px;padding:14px 20px 12px 45px;border:0;border-bottom:1px solid #ddd}
 #search-bar:focus{outline:3px solid #ddd}.dropdown{position:relative;display:inline-block}

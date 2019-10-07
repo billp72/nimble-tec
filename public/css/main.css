@@ -29,6 +29,7 @@ h1, h2 {
 }*/
 .linkColor {
     color:#0000EE !important;
+    cursor: pointer;
 }
 
 .title {
