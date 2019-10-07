@@ -14,14 +14,14 @@ $(function($){
                     $('tbody').append($('<tr>').append(
                         $('<td>').append('<input name="box-'+index+'" class="all" type="checkbox"'+
                         'value="'+row.tel+'" />'),
-                        $('<td class="column-'+index+'">').append(row.firstName),
-                        $('<td class="column-'+index+'">').append(row.primary),
-                        $('<td class="column-'+index+'">').append(row.secondary || 'N/A'),
-                        $('<td class="column-'+index+'">').append(row.hobby || 'N/A'),
-                        $('<td class="column-'+index+'">').append(row.about.trunc(50, true) +
+                        $('<td class="row-'+index+'">').append(row.firstName),
+                        $('<td class="row-'+index+'">').append(row.primary),
+                        $('<td class="row-'+index+'">').append(row.secondary || 'N/A'),
+                        $('<td class="row-'+index+'">').append(row.hobby || 'N/A'),
+                        $('<td class="row-'+index+'">').append(row.about.trunc(50, true) +
                         '&nbsp;(<span onclick="seefull(\''+ row.about + '\')" class="linkColor">see full</span>)'),
-                        $('<td class="column-'+index+'">').append(row.distance + ' mi'),
-                        $('<td class="column-'+index+'">').append(row.tel)     
+                        $('<td class="row-'+index+'">').append(row.distance + ' mi'),
+                        $('<td class="row-'+index+'">').append(row.tel)     
                     ));
                 });
             });
