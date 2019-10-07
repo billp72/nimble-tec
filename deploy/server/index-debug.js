@@ -64,11 +64,13 @@ mongoClient.connect(err => {
 
 var db_queries = {
     search: function(db, alpha, page, resPerPage, callback){
-        db.collection('applicants').find({'primary': new RegExp(alpha, 'i')})
+        //new RegExp(alpha, 'i')
+        var regex = new RegExp(exporter.regEx(alpha), 'gi');
+        db.collection('applicants').find({'primary': regex})
         .skip((resPerPage * page) - resPerPage) //get first 9 then skip 9 and get the next 9 and so on
         .limit(resPerPage)
         .toArray(function(error, response){
-            db.collection('applicants').find({'primary': new RegExp(alpha, 'i')}).count(function(err, count){
+            db.collection('applicants').find({'primary': regex}).count(function(err, count){
                 callback(response, count, error);
             });
             

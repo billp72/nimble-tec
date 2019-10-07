@@ -54,10 +54,13 @@ var base64 = {
         } 
     }
 };
- 
+var regEx = function(string){
+    return string.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
 module.exports = {'data': data, 
                   'empty': empty, 
                   'trimObjStrings': trimObjStrings, 
                   'googlekey': googlemapskey,
-                  'base64': base64
+                  'base64': base64,
+                  'regEx':regEx
                 };
