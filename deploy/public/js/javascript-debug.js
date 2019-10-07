@@ -15,13 +15,13 @@ $(function($){
                         $('<td>').append('<input name="box-'+index+'" class="all" type="checkbox"'+
                         'value="'+row.tel+'" />'),
                         $('<td class="column-'+index+'">').append(row.firstName),
+                        $('<td class="column-'+index+'">').append(row.primary),
+                        $('<td class="column-'+index+'">').append(row.secondary || 'N/A'),
+                        $('<td class="column-'+index+'">').append(row.hobby || 'N/A'),
                         $('<td class="column-'+index+'">').append(row.about.trunc(50, true) +
                         '&nbsp;(<span onclick="seefull(\''+ row.about + '\')" class="linkColor">see full</span>)'),
                         $('<td class="column-'+index+'">').append(row.distance + ' mi'),
-                        $('<td class="column-'+index+'">').append(row.tel),
-                        $('<td class="column-'+index+'">').append(row.primary),
-                        $('<td class="column-'+index+'">').append(row.secondary),
-                        $('<td class="column-'+index+'">').append(row.hobby)
+                        $('<td class="column-'+index+'">').append(row.tel)     
                     ));
                 });
             });
