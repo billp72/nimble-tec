@@ -80,9 +80,9 @@ $(function($){
    });
 
    var createPagination = function(pages, currentPage, _this){
-       pages = 2;
+
         currentPage = parseInt(currentPage, 10);
-        currentPage = 2;
+        
         if(currentPage < pages && currentPage === 1){  
             $(".pagination").html(
                 '<span>'+currentPage+'</span><a class="currentPage"></a>&nbsp;of&nbsp;'+
