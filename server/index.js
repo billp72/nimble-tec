@@ -32,7 +32,12 @@ app.set('view engine', 'ejs');
 app.use(session({
     secret: process.env.SESSIONSECRETELOCAL || process.env.SESSIONSECRETE,
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    rolling: true,
+    cookie: {
+        httpOnly: true,
+        maxAge: 1*60*60*1000
+    }
 }));
 app.use(cors());
 
