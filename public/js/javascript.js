@@ -28,9 +28,11 @@ $(function($){
                 });
             });
      
-            if(results.count === 0){
+           
+             setTimeout(function(){
                 $('.results').remove();
-            }
+             },2000);
+          
             createPagination(results.pages, results.currentPage, _this);
         });
     }
