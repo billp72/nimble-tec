@@ -20,6 +20,8 @@ $(function($){
                         $('<td class="row-'+index+'">').append(row.hobby || 'N/A'),
                         $('<td class="row-'+index+'">').append(row.about.trunc(50, true) +
                         '&nbsp;(<span onclick="seefull(\''+ row.about + '\')" class="linkColor">see full</span>)'),
+                        $('<td class="row-'+index+'">').append(row.experience == 1 ?
+                        row.experience + ' year' : row.experience + ' years'),
                         $('<td class="row-'+index+'">').append(row.distance + ' mi'),
                         $('<td class="row-'+index+'">').append(row.tel)     
                     ));
